@@ -1,0 +1,131 @@
+let currentSubject = "";
+
+function setSubject(subject) {
+  currentSubject = subject;
+  document.getElementById(
+    "chat-log"
+  ).innerHTML += `<div class="chat-message user"><b>Subject set to:</b> ${subject}</div>`;
+}
+
+async function getResponse() {
+  const userInput = document.getElementById("userInput").value;
+  const chatLog = document.getElementById("chat-log");
+  const loader = document.getElementById("loader");
+  const loadingMessage = document.getElementById("loading-message");
+
+  if (userInput.trim() === "") {
+    return;
+  }
+
+  chatLog.innerHTML += `<div class="chat-message user"><b>You:</b> ${userInput}</div>`;
+  document.getElementById("userInput").value = "";
+
+  // Show the loader and loading message
+  loader.style.display = "block";
+  loadingMessage.style.display = "block";
+
+  const API_KEY = "sk-proj-Jx0emX8OfKsgH13Rni4YT3BlbkFJ98grAjI52SI5dPGkq7ZN"; // Your OpenAI API key
+  const API_URL = "https://api.openai.com/v1/chat/completions"; // Endpoint for Chat API
+
+  const data = {
+    model: "gpt-3.5-turbo", // Specify the model as 'gpt-3.5-turbo'
+    messages: [
+      {
+        role: "system",
+        content: `You are a helpful tutor specialized in ${currentSubject}. Your responses should be clear, concise, and easy to understand, similar to how a teacher would explain concepts to kids and teens.`
+      },
+      { role: "user", content: userInput }
+    ],
+    max_tokens: 150
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    console.log(result); // Log the entire response for debugging
+
+    // Hide the loader and loading message
+    loader.style.display = "none";
+    loadingMessage.style.display = "none";
+
+    if (result.choices && result.choices.length > 0) {
+      const messageContent = result.choices[0].message.content.trim();
+      const messageHtml = generateMessageHtml(messageContent);
+      chatLog.innerHTML += `<div class="chat-message"><b>TutorBot:</b> ${messageHtml}</div>`;
+    } else if (result.error) {
+      chatLog.innerHTML += `<div class="chat-message error"><b>Error:</b> ${result.error.message}</div>`;
+    } else {
+      chatLog.innerHTML += `<div class="chat-message"><b>TutorBot:</b> No response available.</div>`;
+    }
+
+    chatLog.scrollTop = chatLog.scrollHeight;
+  } catch (error) {
+    loader.style.display = "none";
+    loadingMessage.style.display = "none";
+    chatLog.innerHTML += `<div class="chat-message error"><b>Error:</b> ${error.message}</div>`;
+  }
+}
+
+function generateMessageHtml(content) {
+  const codeBlockRegex = /```([^`]+)```/g;
+  let match;
+  let htmlContent = content;
+
+  while ((match = codeBlockRegex.exec(content)) !== null) {
+    const codeBlock = match[1];
+    const codeHtml = `<pre class="chat-message code"><code>${escapeHtml(
+      codeBlock
+    )}</code><button class="copy-btn" onclick="copyToClipboard('${escapeHtml(
+      codeBlock
+    )}')"><i class="fas fa-copy"></i></button></pre>`;
+    htmlContent = htmlContent.replace(match[0], codeHtml);
+  }
+
+  return htmlContent;
+}
+
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      alert("Code copied to clipboard!");
+    },
+    () => {
+      alert("Failed to copy code to clipboard.");
+    }
+  );
+}
+
+// Modal script
+window.onload = function () {
+  var modal = document.getElementById("infoModal");
+  var span = document.getElementsByClassName("close")[0];
+
+  modal.style.display = "block";
+
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+};

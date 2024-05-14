@@ -1,0 +1,200 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(
+    to right,
+    #d2f6fc,
+    #e1fdfd
+  ); /* Soft blue and white gradient */
+  margin: 0;
+  padding: 0 20px;
+}
+
+.container {
+  background-color: #ffffff; /* White background */
+  padding: 50px 20px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  margin-top: 40px; /* Add top margin */
+}
+
+.logo-container {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.subject-btn {
+  background: linear-gradient(to bottom right, #1ea4cc, #34c9eb);
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.subject-btn:hover::before {
+  width: 0;
+  height: 0;
+}
+
+.subject-btn:hover {
+  background-color: #148cbf; /* Darker blue on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+.subject-btn:active {
+  background-color: #0f7396; /* Even darker blue on click */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(1px);
+}
+
+.chatbox {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+#chat-log {
+  height: 300px;
+  overflow-y: auto;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  margin-bottom: 10px;
+  resize: none;
+  font-family: "Roboto", sans-serif;
+  transition: all 0.3s ease;
+}
+
+textarea:focus {
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.7);
+  outline: none;
+}
+
+.ask-btn {
+  background: linear-gradient(to bottom right, #39d353, #32c04a);
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.ask-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.ask-btn:hover::before {
+  width: 0;
+  height: 0;
+}
+
+.ask-btn:hover {
+  background-color: #32c04a; /* Darker green on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+.ask-btn:active {
+  background-color: #2a9e3e; /* Even darker green on click */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(1px);
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+  display: none;
+}
+
+#loading-message {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 16px;
+  display: none;
+  color: #3498db;
+}
